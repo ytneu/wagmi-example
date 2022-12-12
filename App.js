@@ -1,56 +1,40 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import { LineChart } from "react-native-wagmi-charts";
-import { CandlestickChart } from "react-native-wagmi-charts";
+import React from "react";
+import { Dimensions, View } from "react-native";
+import {
+  ChartDot,
+  ChartPath,
+  ChartPathProvider,
+  monotoneCubicInterpolation,
+} from "@rainbow-me/animated-charts";
 
-const data = [
-  {
-    timestamp: 1625945400000,
-    open: 33575.25,
-    high: 33600.52,
-    low: 33475.12,
-    close: 33520.11,
-  },
-  {
-    timestamp: 1625946300000,
-    open: 33545.25,
-    high: 33560.52,
-    low: 33510.12,
-    close: 33520.11,
-  },
-  {
-    timestamp: 1625947200000,
-    open: 33510.25,
-    high: 33515.52,
-    low: 33250.12,
-    close: 33250.11,
-  },
-  {
-    timestamp: 1625948100000,
-    open: 33215.25,
-    high: 33430.52,
-    low: 33215.12,
-    close: 33420.11,
-  },
+export const { width: SIZE } = Dimensions.get("window");
+
+export const data = [
+  { x: 1453075200, y: 1.47 },
+  { x: 1453161600, y: 1.37 },
+  { x: 1453248000, y: 1.53 },
+  { x: 1453334400, y: 1.54 },
+  { x: 1453420800, y: 1.52 },
+  { x: 1453507200, y: 2.03 },
+  { x: 1453593600, y: 2.1 },
+  { x: 1453680000, y: 2.5 },
+  { x: 1453766400, y: 2.3 },
+  { x: 1453852800, y: 2.42 },
+  { x: 1453939200, y: 2.55 },
+  { x: 1454025600, y: 2.41 },
+  { x: 1454112000, y: 2.43 },
+  { x: 1454198400, y: 2.2 },
 ];
+
+const points = monotoneCubicInterpolation({ data, range: 40 });
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <CandlestickChart.Provider data={data}>
-        <CandlestickChart>
-          <CandlestickChart.Candles />
-        </CandlestickChart>
-      </CandlestickChart.Provider>
+    <View style={{ backgroundColor: "black" }}>
+      <ChartPathProvider data={{ points, smoothingStrategy: "bezier" }}>
+        <ChartPath height={SIZE / 2} stroke="yellow" width={SIZE} />
+        <ChartDot style={{ backgroundColor: "blue" }} />
+      </ChartPathProvider>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
